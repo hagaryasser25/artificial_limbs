@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "744710390830",
+    "project_id": "artificial-limbs",
+    "storage_bucket": "artificial-limbs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744710390830:android:c7a41852e020a7a3800bbf",
+        "android_client_info": {
+          "package_name": "com.example.artificial_limbs"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD64WjmMz1IDHjSQpD4sS7wxR2SeTAmirw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
