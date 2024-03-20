@@ -1,5 +1,6 @@
 import 'package:artificial_limbs/admin/admin_products.dart';
 import 'package:artificial_limbs/auth/login_screen.dart';
+import 'package:artificial_limbs/user/user_cart.dart';
 import 'package:artificial_limbs/user/user_products.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -91,8 +92,8 @@ class _UserHomeState extends State<UserHome> {
                         splashColor: Theme.of(context).splashColor,
                         child: ListTile(
                           onTap: () {
-                            // Navigator.pushNamed(
-                            //  context, UserCart.routeName);
+                             Navigator.pushNamed(
+                              context, UserCart.routeName);
                           },
                           title: Text("سلة المشتريات"),
                           leading: Icon(Icons.shopping_cart),

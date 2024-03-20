@@ -1,9 +1,11 @@
 import 'package:artificial_limbs/admin/add_product.dart';
+import 'package:artificial_limbs/admin/admin-list.dart';
 import 'package:artificial_limbs/admin/admin_home.dart';
 import 'package:artificial_limbs/admin/admin_products.dart';
 import 'package:artificial_limbs/auth/admin_login.dart';
 import 'package:artificial_limbs/auth/login_screen.dart';
 import 'package:artificial_limbs/auth/signup_screen.dart';
+import 'package:artificial_limbs/user/user_cart.dart';
 import 'package:artificial_limbs/user/user_home.dart';
 import 'package:artificial_limbs/user/user_products.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -51,11 +53,14 @@ class MyApp extends StatelessWidget {
       routes: {
         AdminLogin.routeName: (ctx) => AdminLogin(),
         AdminHome.routeName: (ctx) => AdminHome(),
+        UserHome.routeName: (ctx) => UserHome(),
         AdminProducts.routeName: (ctx) => AdminProducts(),
         UserProducts.routeName: (ctx) => UserProducts(),
         AddProduct.routeName: (ctx) => AddProduct(),
         LoginScreen.routeName: (ctx) => LoginScreen(),
         SignupScreen.routeName: (ctx) => SignupScreen(),
+        UserCart.routeName: (ctx) => UserCart(),
+        AdminList.routeName: (ctx) => AdminList(),
       },
     );
   }

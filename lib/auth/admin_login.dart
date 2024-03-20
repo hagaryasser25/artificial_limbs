@@ -141,10 +141,7 @@ class _AdminLoginState extends State<AdminLogin> {
                                         .show(context);
 
                                     return;
-                                  }
-
-                                 
-
+                                  }                                
                                   ProgressDialog progressDialog =
                                       ProgressDialog(context,
                                           title: Text('Logging In'),

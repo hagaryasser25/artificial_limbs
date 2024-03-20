@@ -1,5 +1,7 @@
 import 'package:artificial_limbs/admin/add_product.dart';
 import 'package:artificial_limbs/models/products_model.dart';
+import 'package:artificial_limbs/models/users_model.dart';
+import 'package:artificial_limbs/user/user_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -31,6 +33,7 @@ class _UserProductsState extends State<UserProducts> {
   late FirebaseApp app;
   List<Products> productsList = [];
   List<String> keyslist = [];
+  var amountController = TextEditingController();
 
   @override
   void didChangeDependencies() {
@@ -51,6 +54,29 @@ class _UserProductsState extends State<UserProducts> {
       if (mounted) {
         setState(() {});
       }
+    });
+  }
+
+  late Users currentUser;
+
+  @override
+  void initState() {
+    getUserData();
+    super.initState();
+  }
+
+  getUserData() async {
+    app = await Firebase.initializeApp();
+    database = FirebaseDatabase(app: app);
+    base = database
+        .reference()
+        .child("users")
+        .child(FirebaseAuth.instance.currentUser!.uid);
+
+    final snapshot = await base.get();
+    setState(() {
+      currentUser = Users.fromSnapshot(snapshot);
+      print(currentUser.fullName);
     });
   }
 
@@ -115,7 +141,7 @@ class _UserProductsState extends State<UserProducts> {
                                       ),
                                     ),
                                     Text(
-                                      'الكمية المتاحة : ${productsList[index].amount.toString()} متر',
+                                      'الكمية المتاحة : ${productsList[index].amount.toString()} ',
                                       textAlign: TextAlign.right,
                                       style: TextStyle(
                                         fontSize: 17,
@@ -133,7 +159,135 @@ class _UserProductsState extends State<UserProducts> {
                                     Center(
                                       child: InkWell(
                                         onTap: () async {
-                                          
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text("Notice"),
+                                                content: SizedBox(
+                                                  height: 65.h,
+                                                  child: TextField(
+                                                    controller:
+                                                        amountController,
+                                                    decoration: InputDecoration(
+                                                      fillColor:
+                                                          HexColor('#155564'),
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Color(
+                                                                0xfff8a55f),
+                                                            width: 2.0),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(),
+                                                      hintText: 'ادخل الكمية',
+                                                    ),
+                                                  ),
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                    style: TextButton.styleFrom(
+                                                      primary:
+                                                          HexColor('#6bbcba'),
+                                                    ),
+                                                    child: Text("اضافة"),
+                                                    onPressed: () async {
+                                                      String name =
+                                                          productsList[index]
+                                                              .name
+                                                              .toString();
+                                                      int? price =
+                                                          productsList[index]
+                                                              .price;
+                                                      int amount = int.parse(
+                                                          amountController.text
+                                                              .trim());
+                                                      int total =
+                                                          price! * amount;
+                                                      String imageUrl =
+                                                          productsList[index]
+                                                              .imageUrl
+                                                              .toString();
+
+                                                      if (amount == 0) {
+                                                        MotionToast(
+                                                                primaryColor:
+                                                                    Colors.blue,
+                                                                width: 300,
+                                                                height: 50,
+                                                                position:
+                                                                    MotionToastPosition
+                                                                        .center,
+                                                                description: Text(
+                                                                    'ادخل الكمية'))
+                                                            .show(context);
+                                                        return;
+                                                      }
+
+                                                      User? user = FirebaseAuth
+                                                          .instance.currentUser;
+
+                                                      if (user != null) {
+                                                        String uid = user.uid;
+
+                                                        DatabaseReference
+                                                            companyRef =
+                                                            FirebaseDatabase
+                                                                .instance
+                                                                .reference()
+                                                                .child('cart')
+                                                                .child(uid);
+
+                                                        String? id = companyRef
+                                                            .push()
+                                                            .key;
+
+                                                        await companyRef
+                                                            .child(id!)
+                                                            .set({
+                                                          'id': id,
+                                                          'name': name,
+                                                          'price': price,
+                                                          'amount': amount,
+                                                          'total': total,
+                                                          'imageUrl': imageUrl,
+                                                          'userName':
+                                                              currentUser
+                                                                  .fullName,
+                                                          'userPhone':
+                                                              currentUser
+                                                                  .phoneNumber,
+                                                        });
+                                                        DatabaseReference
+                                                            marbleRef =
+                                                            FirebaseDatabase
+                                                                .instance
+                                                                .reference()
+                                                                .child(
+                                                                    'products')
+                                                                .child(
+                                                                    '${productsList[index].id}');
+
+                                                        await marbleRef.update({
+                                                          'amount':
+                                                              productsList[
+                                                                          index]
+                                                                      .amount! -
+                                                                  amount,
+                                                        });
+                                                      }
+
+                                                      showAlertDialog(context);
+                                                      Navigator.pushNamed(
+                                                          context,
+                                                          UserHome.routeName);
+                                                    },
+                                                  )
+                                                ],
+                                              );
+                                            },
+                                          );
                                         },
                                         child: Icon(Icons.shopping_cart,
                                             color: Color.fromARGB(

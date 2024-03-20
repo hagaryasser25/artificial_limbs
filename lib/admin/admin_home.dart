@@ -1,3 +1,4 @@
+import 'package:artificial_limbs/admin/admin-list.dart';
 import 'package:artificial_limbs/admin/admin_products.dart';
 import 'package:artificial_limbs/auth/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -90,8 +91,8 @@ class _AdminHomeState extends State<AdminHome> {
                         splashColor: Theme.of(context).splashColor,
                         child: ListTile(
                           onTap: () {
-                            // Navigator.pushNamed(
-                            //  context, UserCart.routeName);
+                             Navigator.pushNamed(
+                              context, AdminList.routeName);
                           },
                           title: Text("طلبيات الشراء"),
                           leading: Icon(Icons.shopping_bag),
